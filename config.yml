@@ -63,27 +63,15 @@ params:
 
     socialIcons:
         - name: CV
-          url: cv.pdf
+          url: https://drive.google.com/file/d/1pTHc3nCty-v1tPKHpeoGFST-zRu-_udc/view?usp=sharing
         - name: Email
-          url: mailto:igelfeld@regensburg.edu
-        - name: Zoom
-          url: https://www.zoom.us/my/igelfeld
+          url: katsu.nishiyama@gmail.com
         - name: Location
           url: location/
-        - name: Office Hours
-          url: officehours/
         - name: Google Scholar
-          url: https://scholar.google.com/citations?user=cL23w-4AAAAJ
-        - name: GitHub
-          url: https://github.com/pmichaillat
-        - name: Substack
-          url: https://pmichaillat.substack.com
-        - name: YouTube
-          url: https://www.youtube.com/@pmichaillat
-        - name: Twitter
-          url: https://x.com/pmichaillat
-        - name: Bluesky
-          url: https://bsky.app/profile/pmichaillat.bsky.social
+          url: https://scholar.google.co.jp/citations?user=L6tgPKoAAAAJ&hl=ja&oi=ao
+        - name: ORCID
+          url: https://orcid.org/0000-0002-8530-0314
 
     assets:
         disableScrollBarStyle: true
