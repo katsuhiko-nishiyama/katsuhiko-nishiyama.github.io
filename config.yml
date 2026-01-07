@@ -62,8 +62,6 @@ params:
               url: https://drive.google.com/file/d/1pTHc3nCty-v1tPKHpeoGFST-zRu-_udc/view?usp=sharing
 
     socialIcons:
-        - name: CV
-          url: https://drive.google.com/file/d/1pTHc3nCty-v1tPKHpeoGFST-zRu-_udc/view?usp=sharing
         - name: Email
           url: katsu.nishiyama@gmail.com
         - name: Location
