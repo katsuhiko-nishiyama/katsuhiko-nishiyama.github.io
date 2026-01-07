@@ -64,8 +64,6 @@ params:
     socialIcons:
         - name: Email
           url: katsu.nishiyama@gmail.com
-        - name: Location
-          url: location/
         - name: Google Scholar
           url: https://scholar.google.co.jp/citations?user=L6tgPKoAAAAJ&hl=ja&oi=ao
         - name: ORCID
