@@ -51,8 +51,8 @@ params:
           title: Katsuhiko Nishiyama
           subtitle: "I am an Asssistant Professor at Osaka School of International Public Policy (OSIPP) of the University of Osaka. I am an **economist** working on topics related to **health**."
           imageUrl: "myphoto.jpg"
-          imageWidth: 160
-          imageHeight: 160
+          imageWidth: 140
+          imageHeight: 140
           buttons:
             - name: Papers
               url: papers/

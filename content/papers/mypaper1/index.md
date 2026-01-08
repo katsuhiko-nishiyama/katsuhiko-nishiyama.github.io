@@ -1,7 +1,7 @@
 ---
 title: "Medical Debt, Self-Insurance, and the Value of Health Insurance for the Non-Elderly" 
 date: 2026-01-08
-tags: ["Health insurance","Medical debt","Job search"]
+tags: 
 author: ["Katsuhiko Nishiyama"]
 description:  
 summary: "Working paper."
