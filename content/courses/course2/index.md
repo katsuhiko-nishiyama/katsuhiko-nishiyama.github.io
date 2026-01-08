@@ -2,7 +2,7 @@
 title: "Health Economics"
 term: "2025 Fall/Winter, 2024 Fall/Winter"
 audience: "Undergraduate (School of Law)"
-summary: "YYYY Semester • Target"
+summary: ""
 cover:
     image: 
     alt: "Course image"
