@@ -47,6 +47,20 @@
      border: 2px solid var(--darkcolor);
 }
 
+.post-entry--compact {
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.post-entry--compact .entry-content {
+    margin: 6px 0;
+    -webkit-line-clamp: 3;
+}
+
+.post-entry--compact .entry-cover {
+    margin-bottom: 6px;
+}
+
 .tag-entry .entry-cover {
     display: none;
 }
