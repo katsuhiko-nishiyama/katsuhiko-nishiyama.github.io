@@ -1,7 +1,7 @@
 {{- define "main" }}
 
 {{- if not .IsHome | and .Title }}
-<header class="page-header">
+<header class="page-header page-header--courses">
   {{- partial "breadcrumbs.html" . }}
   <h1>{{ .Title }}</h1>
   {{- if .Description }}
