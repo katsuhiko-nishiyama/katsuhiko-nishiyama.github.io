@@ -19,7 +19,7 @@ menu:
           url: teaching/
           weight: 2
         - name: CV
-          url: "cv_katsu.pdf"
+          url: "cv.pdf"
           weight: 3
 
 params:
@@ -59,7 +59,7 @@ params:
             - name: Teaching
               url: teaching/
             - name: CV
-              url: https://drive.google.com/file/d/1pTHc3nCty-v1tPKHpeoGFST-zRu-_udc/view?usp=sharing
+              url: "cv.pdf"
 
     socialIcons:
         - name: Email
