@@ -12,8 +12,8 @@ taxonomies:
 
 menu:
     main:
-        - name: Research
-          url: research/
+        - name: Papers
+          url: papers/
           weight: 1 
         - name: Teaching
           url: teaching/
@@ -54,8 +54,8 @@ params:
           imageWidth: 160
           imageHeight: 160
           buttons:
-            - name: Research
-              url: research/
+            - name: Papers
+              url: papers/
             - name: Teaching
               url: teaching/
             - name: CV
