@@ -92,6 +92,7 @@
     right: 0;
     top: 0;
     bottom: 0;
+    z-index: 1;
 }
 
 .entry-hint {
@@ -118,4 +119,101 @@
 .entry-cover a {
     color: var(--secondary);
     box-shadow: 0 1px 0 var(--primary);
+}
+
+.entry-content--meta {
+    margin: 6px 0;
+}
+
+/* /papers/ section spacing */
+.papers-section {
+    margin-top: calc(var(--gap) * 1.25);
+}
+
+.papers-section:first-of-type {
+    margin-top: 0;
+}
+
+.papers-section__title {
+    margin: 0 0 12px 0;
+    padding-top: 6px;
+}
+
+.paper-entry .entry-header,
+.paper-entry .entry-content,
+.paper-entry .entry-footer,
+.paper-entry .entry-cover,
+.paper-entry .paper-links {
+    position: relative;
+    z-index: 2;
+}
+
+.paper-authors,
+.paper-publication {
+    margin: 0;
+}
+
+/* Make authors + publication prominent (black text) */
+.paper-authors,
+.paper-publication {
+    color: var(--content);
+}
+
+/* If journal name is wrapped in *...* (markdown), it becomes <em> */
+.paper-publication em {
+    font-style: italic;
+}
+
+.paper-previous-title,
+.paper-coverage {
+    margin: 0;
+}
+
+.paper-meta-label {
+    font-weight: 600;
+    color: var(--secondary);
+}
+
+.paper-coverage__link {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.paper-links .paper-link {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.paper-actions__row {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.paper-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--entry);
+    color: var(--content);
+    font-size: 13px;
+    box-shadow: none;
+    white-space: nowrap;
+}
+
+.paper-btn:hover {
+    border-color: var(--darkcolor);
+}
+
+.paper-btn--secondary {
+    background: var(--code-bg);
+}
+
+.paper-btn--small {
+    padding: 5px 10px;
+    font-size: 13px;
 }

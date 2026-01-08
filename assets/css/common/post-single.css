@@ -439,3 +439,57 @@ a[href^="#fn:"], a[href^="#fnref:"] {
 a[href^="#fn:"]:hover, a[href^="#fnref:"]:hover {
     color: var(--darkcolor);
 }
+
+/* Papers: single page header box (authors / publication / buttons) */
+.paper-header {
+    margin-bottom: 8px;
+}
+
+.paper-meta {
+    margin-top: 8px;
+    color: var(--secondary);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/* Make authors + publication prominent on paper pages */
+.paper-meta__authors,
+.paper-meta__publication {
+    color: var(--content);
+}
+
+.paper-meta__publication em {
+    font-style: italic;
+}
+
+.paper-meta__row + .paper-meta__row {
+    margin-top: 4px;
+}
+
+.paper-actions {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.paper-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--entry);
+    color: var(--content);
+    font-size: 14px;
+    box-shadow: none;
+}
+
+.paper-btn:hover {
+    border-color: var(--darkcolor);
+}
+
+.paper-btn--secondary {
+    background: var(--code-bg);
+}

@@ -1,0 +1,73 @@
+{{- define "main" }}
+
+<article class="post-single paper-single">
+  <header class="post-header paper-header">
+    {{ partial "breadcrumbs.html" . }}
+
+    <h1 class="post-title entry-hint-parent">{{ .Title }}</h1>
+
+    {{- if .Description }}
+    <div class="post-description">
+      {{ .Description | markdownify }}
+    </div>
+    {{- end }}
+
+    <div class="paper-meta">
+      {{- with .Params.author }}
+      <div class="paper-meta__row paper-meta__authors">{{ delimit . ", " }}</div>
+      {{- end }}
+
+      {{- with .Params.publication }}
+      <div class="paper-meta__row paper-meta__publication">{{ . | markdownify }}</div>
+      {{- end }}
+    </div>
+
+    {{- $pdfs := (.Resources.Match "*.pdf") }}
+    {{- $externalUrl := .Params.externalLink.url | default .Params.externalLink.URL }}
+    {{- if or $pdfs $externalUrl }}
+    <div class="paper-actions">
+      {{- range $pdfs }}
+        {{- $name := lower .Name }}
+        {{- $label := "PDF" }}
+        {{- if in $name "appendix" }}{{- $label = "Appendix" }}{{- end }}
+        {{- if or (in $name "slides") (in $name "presentation") }}{{- $label = "Slides" }}{{- end }}
+        <a class="paper-btn" href="{{ .RelPermalink }}">{{ $label }}</a>
+      {{- end }}
+
+      {{- with $externalUrl }}
+        {{- $status := ($.Param "paperStatus") | default "working" }}
+        {{- $text := $.Params.externalLink.text | default $.Params.externalLink.Text }}
+        {{- $text = cond (eq $status "published") "Link" ($text | default "Link") }}
+        <a class="paper-btn paper-btn--secondary" href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ $text }}</a>
+      {{- end }}
+    </div>
+    {{- end }}
+  </header>
+
+  {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
+  {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
+
+  {{- if .Content }}
+  <div class="post-content">
+    {{- if not (.Param "disableAnchoredHeadings") }}
+    {{- partial "anchored_headings.html" .Content -}}
+    {{- else }}{{ .Content }}{{ end }}
+  </div>
+  {{- end }}
+
+  <footer class="post-footer">
+    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
+    {{- $terms := ($.GetTerms $tags) }}
+    {{- if gt (len $terms) 0 }}
+    <ul class="post-tags">
+      {{- range $terms }}
+      <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
+      {{- end }}
+    </ul>
+    {{- end }}
+  </footer>
+</article>
+
+{{- end }}{{/* end main */}}
+
+

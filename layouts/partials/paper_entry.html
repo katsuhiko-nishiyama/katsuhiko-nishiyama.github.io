@@ -1,0 +1,95 @@
+{{- $p := .page -}}
+
+<article class="post-entry post-entry--compact paper-entry">
+  {{- $isHidden := ($p.Param "cover.hiddenInList") | default ($p.Param "cover.hidden") | default false }}
+  {{- partial "cover.html" (dict "cxt" $p "IsSingle" false "isHidden" $isHidden) }}
+
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">{{- $p.Title -}}</h2>
+  </header>
+
+  {{- with $p.Params.author }}
+  <div class="entry-content entry-content--meta">
+    <p class="paper-authors">{{ delimit . ", " }}</p>
+  </div>
+  {{- end }}
+
+  {{- with $p.Params.publication }}
+  <div class="entry-content entry-content--meta">
+    <p class="paper-publication">{{ . | markdownify }}</p>
+  </div>
+  {{- end }}
+
+  {{- with $p.Params.previousTitle }}
+  <div class="entry-content entry-content--meta">
+    <p class="paper-previous-title"><span class="paper-meta-label">Previous title:</span>&nbsp;{{ . }}</p>
+  </div>
+  {{- end }}
+
+  {{- with $p.Params.mediaCoverage }}
+  <div class="entry-content entry-content--meta">
+    <p class="paper-coverage">
+      <span class="paper-meta-label">Coverage:</span>&nbsp;
+      {{- range $i, $c := . }}
+        {{- if gt $i 0 }}, {{ end -}}
+        {{- $u := $c.url | default $c.URL -}}
+        {{- $t := $c.text | default $c.Text -}}
+        {{- if $u -}}
+          <a class="paper-coverage__link" href="{{ $u }}" target="_blank" rel="noopener noreferrer">{{ $t }}</a>
+        {{- else -}}
+          {{- $t -}}
+        {{- end -}}
+      {{- end }}
+    </p>
+  </div>
+  {{- end }}
+
+  {{- $pdfs := ($p.Resources.Match "*.pdf") }}
+  {{- $externalUrl := $p.Params.externalLink.url | default $p.Params.externalLink.URL }}
+  {{- $status := ($p.Param "paperStatus") | default "working" }}
+  {{- $externalText := $p.Params.externalLink.text | default $p.Params.externalLink.Text }}
+  {{- $externalText = cond (eq $status "published") "Link" ($externalText | default "Link") }}
+  {{- $links := $p.Params.links }}
+
+  {{- if or $pdfs $externalUrl $links }}
+  <div class="entry-content entry-content--meta paper-actions">
+    <p class="paper-actions__row">
+      {{- range $pdfs }}
+        {{- $name := lower .Name }}
+        {{- $label := "PDF" }}
+        {{- if in $name "paper" }}{{- $label = "Paper" }}{{- end }}
+        {{- if in $name "draft" }}{{- $label = "Draft" }}{{- end }}
+        {{- if in $name "appendix" }}{{- $label = "Appendix" }}{{- end }}
+        {{- if or (in $name "slides") (in $name "presentation") }}{{- $label = "Slides" }}{{- end }}
+        <a class="paper-btn paper-btn--small" href="{{ .RelPermalink }}">{{ $label }}</a>
+      {{- end }}
+
+      {{- with $externalUrl }}
+        <a class="paper-btn paper-btn--small paper-btn--secondary" href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ $externalText }}</a>
+      {{- end }}
+
+      {{- with $links }}
+        {{- range . }}
+          {{- $u := .url | default .URL }}
+          {{- $t := .text | default .Text | default .label | default .Label | default "Link" }}
+          {{- if $u }}
+            <a class="paper-btn paper-btn--small paper-btn--secondary" href="{{ $u }}" target="_blank" rel="noopener noreferrer">{{ $t }}</a>
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    </p>
+  </div>
+  {{- end }}
+
+  {{- if and (ne ($p.Param "hideSummary") true) $p.Summary }}
+  <div class="entry-content">
+    <p>{{ $p.Summary | plainify | htmlUnescape }}{{ if $p.Truncated }}...{{ end }}</p>
+  </div>
+  {{- end }}
+
+  {{- if not ($p.Param "disableLink") }}
+  <a class="entry-link" aria-label="post link to {{ $p.Title | plainify }}" href="{{ $p.Permalink }}"></a>
+  {{- end }}
+</article>
+
+
