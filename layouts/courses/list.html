@@ -41,7 +41,9 @@
   </div>
   {{- end }}
 
+  {{- if not (.Param "disableLink") }}
   <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+  {{- end }}
 </article>
 {{- end }}
 
