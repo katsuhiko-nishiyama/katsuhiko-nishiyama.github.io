@@ -15,8 +15,8 @@ menu:
         - name: Papers
           url: papers/
           weight: 1 
-        - name: Teaching
-          url: teaching/
+        - name: Courses
+          url: courses/
           weight: 2
         - name: CV
           url: "cv.pdf"
@@ -50,14 +50,14 @@ params:
           enabled: true
           title: Katsuhiko Nishiyama
           subtitle: "I am an Asssistant Professor at Osaka School of International Public Policy (OSIPP) of the University of Osaka. I am an **economist** working on topics related to **health**."
-          imageUrl: "picture.jpeg"
+          imageUrl: "myphoto.jpg"
           imageWidth: 160
           imageHeight: 160
           buttons:
             - name: Papers
               url: papers/
-            - name: Teaching
-              url: teaching/
+            - name: Courses
+              url: courses/
             - name: CV
               url: "cv.pdf"
 
