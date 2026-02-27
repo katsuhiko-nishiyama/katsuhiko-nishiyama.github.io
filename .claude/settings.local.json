@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(python -c \":*)",
-      "Bash(hugo)"
+      "Bash(hugo)",
+      "Bash(gh run list --limit 5)",
+      "Bash(git submodule status)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:katsuhiko-nishiyama.github.io)"
     ]
   }
 }
