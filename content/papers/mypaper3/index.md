@@ -18,7 +18,7 @@ cover:
 
 ## Download
 
-- [Paper](Jobloss_20260227.pdf)
+- [Paper](Jobloss_paper_20260227.pdf)
 
 ---
 
