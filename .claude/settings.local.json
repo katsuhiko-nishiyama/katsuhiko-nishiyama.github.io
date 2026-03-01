@@ -6,7 +6,8 @@
       "Bash(gh run list --limit 5)",
       "Bash(git submodule status)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:katsuhiko-nishiyama.github.io)"
+      "WebFetch(domain:katsuhiko-nishiyama.github.io)",
+      "Bash(hugo server)"
     ]
   }
 }
