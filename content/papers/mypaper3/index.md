@@ -5,7 +5,7 @@ tags: []
 author: ["Katsuhiko Nishiyama"]
 description: ""
 summary: ""
-paperStatus: working
+paperStatus: submitted
 hideSummary: true
 disableLink: true
 cover:
