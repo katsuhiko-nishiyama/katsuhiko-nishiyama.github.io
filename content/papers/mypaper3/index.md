@@ -1,6 +1,6 @@
 ---
 title: "The Impact of Job Displacement on Health Insurance Coverage in the Post-ACA Era"
-date: 2026-02-27
+date: 2026-02-28
 tags: []
 author: ["Katsuhiko Nishiyama"]
 description: ""
@@ -18,7 +18,7 @@ cover:
 
 ## Download
 
-- [Paper](Jobloss_paper_20260227.pdf)
+- [Paper](Jobloss_paper_20260228.pdf)
 
 ---
 
