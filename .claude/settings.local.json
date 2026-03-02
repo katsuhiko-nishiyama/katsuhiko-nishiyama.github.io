@@ -7,7 +7,8 @@
       "Bash(git submodule status)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:katsuhiko-nishiyama.github.io)",
-      "Bash(hugo server)"
+      "Bash(hugo server)",
+      "Bash(curl -s http://localhost:1313/papers/)"
     ]
   }
 }
