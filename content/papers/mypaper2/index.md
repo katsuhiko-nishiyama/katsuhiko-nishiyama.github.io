@@ -5,7 +5,7 @@ tags: []
 author: ["Toshiaki Iizuka", "Katsuhiko Nishiyama"]
 description: ""
 summary: ""
-paperStatus: under review
+paperStatus: submitted
 hideSummary: true
 disableLink: true
 cover:
