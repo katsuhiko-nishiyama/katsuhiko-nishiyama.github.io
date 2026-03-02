@@ -10,7 +10,7 @@ hideSummary: true
 disableLink: true
 cover:
     image:
-    alt: "The Impact of Job Displacement on Health Insurance Coverage in the Post-ACA Era" 
+    alt: "The Impact of Job Displacement on Health Insurance Status in the Post-ACA Era" 
     relative: true
 ---
 
