@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLS信頼区間シミュレーション</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.26.0/plotly.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .plot-container {
+            height: 350px;
+            margin: 10px 0;
+        }
+        
+        .table-container {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        
+        th, td {
+            padding: 8px 12px;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        th {
+            background: #3498db;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .parameters {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .parameters strong {
+            font-size: 1.2em;
+            color: #d35400;
+        }
+        
+        .results {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .simulation-section {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .confidence-stats {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            border-left: 5px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>OLS信頼区間シミュレーション</h1>
+            <p>教育年数と収入の関係における統計的推論の可視化</p>
+        </div>
+        
+        <div class="grid">
+            <!-- Section 1: Population Distribution -->
+            <div class="section">
+                <h3>（１）母集団分布</h3>
+                <p>教育年数(X)と収入(Y)の同時確率密度関数<br>
+                <small>（本来は未知だが仮想的に以下の分布を考える）</small></p>
+                <div id="population-surface" class="plot-container"></div>
+            </div>
+            
+            <!-- Section 2: True Regression Line -->
+            <div class="section">
+                <h3>（２）真の回帰パラメータ</h3>
+                <div class="parameters">
+                    <strong>真の回帰式: E(Y|X) = β₀ + β₁X</strong><br>
+                    <span id="true-params">β₀ = 20, β₁ = 3</span><br>
+                    <small>（これらは仮想的な真の値である）</small>
+                </div>
+                <div id="true-regression" class="plot-container"></div>
+            </div>
+            
+            <!-- Section 3: Sample Data -->
+            <div class="section">
+                <h3>（３）無作為標本の実現値としてのデータ (n=100)</h3>
+                <button onclick="generateNewSample()">新しい標本を生成</button>
+                <div class="table-container">
+                    <table id="sample-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>教育年数(X)</th>
+                                <th>収入(Y)万円/月</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sample-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Section 4: OLS Estimates -->
+            <div class="section">
+                <h3>（４）OLS推定結果</h3>
+                <div class="results" id="ols-results">
+                </div>
+                <div id="ols-plot" class="plot-container"></div>
+            </div>
+            
+            <!-- Section 5: Confidence Interval Simulation -->
+            <div class="section simulation-section">
+                <h3>（５）β₁の信頼区間シミュレーション</h3>
+                <p>1000回の標本抽出により、β₁の95%信頼区間が真の値を含む確率を確認</p>
+                <div class="controls">
+                    <button onclick="runSimulation()">シミュレーション実行</button>
+                    <button onclick="resetSimulation()">リセット</button>
+                </div>
+                <div class="confidence-stats" id="simulation-stats">
+                    シミュレーション実行前
+                </div>
+                <div id="simulation-plot" class="plot-container" style="height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global parameters
+        const trueBeta0 = 20;
+        const trueBeta1 = 3;
+        const sigma = 8; // Error standard deviation
+        const n = 100;
+        
+        let currentSample = [];
+        let simulationResults = [];
+        
+        // Generate normal random variables
+        function normalRandom(mean = 0, std = 1) {
+            const u1 = Math.random();
+            const u2 = Math.random();
+            const z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+            return z0 * std + mean;
+        }
+        
+        // Generate sample data
+        function generateSample() {
+            const sample = [];
+            for (let i = 0; i < n; i++) {
+                const x = Math.max(8, Math.min(20, normalRandom(12, 3))); // Education years 8-20
+                const y = trueBeta0 + trueBeta1 * x + normalRandom(0, sigma);
+                sample.push({ id: i + 1, x: x, y: Math.max(0, y) });
+            }
+            return sample;
+        }
+        
+        // OLS estimation
+        function calculateOLS(sample) {
+            const n = sample.length;
+            const sumX = sample.reduce((sum, d) => sum + d.x, 0);
+            const sumY = sample.reduce((sum, d) => sum + d.y, 0);
+            const sumXY = sample.reduce((sum, d) => sum + d.x * d.y, 0);
+            const sumX2 = sample.reduce((sum, d) => sum + d.x * d.x, 0);
+            
+            const meanX = sumX / n;
+            const meanY = sumY / n;
+            
+            const beta1Hat = (sumXY - n * meanX * meanY) / (sumX2 - n * meanX * meanX);
+            const beta0Hat = meanY - beta1Hat * meanX;
+            
+            // Calculate standard errors
+            const residuals = sample.map(d => d.y - (beta0Hat + beta1Hat * d.x));
+            const rss = residuals.reduce((sum, r) => sum + r * r, 0);
+            const sigmaHat = Math.sqrt(rss / (n - 2));
+            
+            const sxx = sumX2 - n * meanX * meanX;
+            const seBeta1 = sigmaHat / Math.sqrt(sxx);
+            const seBeta0 = sigmaHat * Math.sqrt(1/n + meanX * meanX / sxx);
+            
+            // 95% confidence intervals (t-distribution with n-2 df, approximated by 1.96)
+            const tValue = 1.984; // t_{0.025, 98}
+            
+            return {
+                beta0Hat,
+                beta1Hat,
+                seBeta0,
+                seBeta1,
+                ci0: [beta0Hat - tValue * seBeta0, beta0Hat + tValue * seBeta0],
+                ci1: [beta1Hat - tValue * seBeta1, beta1Hat + tValue * seBeta1],
+                sigmaHat,
+                rSquared: 1 - rss / sample.reduce((sum, d) => sum + Math.pow(d.y - meanY, 2), 0)
+            };
+        }
+        
+        // Plot population surface
+        function plotPopulationSurface() {
+            const x = [];
+            const y = [];
+            const z = [];
+            
+            for (let i = 0; i <= 20; i++) {
+                y.push(8 + i * 0.6); // Education 8-20 (now on y-axis)
+            }
+            for (let j = 0; j <= 20; j++) {
+                x.push(j * 4); // Income 0-80 (now on x-axis)
+            }
+            
+            for (let i = 0; i < y.length; i++) {
+                const row = [];
+                for (let j = 0; j < x.length; j++) {
+                    const expectedY = trueBeta0 + trueBeta1 * y[i];
+                    const density = Math.exp(-0.5 * Math.pow((x[j] - expectedY) / sigma, 2)) / (sigma * Math.sqrt(2 * Math.PI));
+                    row.push(density);
+                }
+                z.push(row);
+            }
+            
+            const trace = {
+                x: x,
+                y: y,
+                z: z,
+                type: 'surface',
+                colorscale: 'Viridis',
+                showscale: false
+            };
+            
+            const layout = {
+                scene: {
+                    xaxis: { 
+                        title: '収入(万円/月)',
+                        autorange: 'reversed'
+                    },
+                    yaxis: { 
+                        title: '教育年数',
+                        autorange: 'reversed'
+                    },
+                    zaxis: { title: '確率密度' },
+                    camera: { eye: { x: 1.5, y: 1.5, z: 1.5 } }
+                },
+                margin: { l: 0, r: 0, b: 0, t: 0 }
+            };
+            
+            Plotly.newPlot('population-surface', [trace], layout, { responsive: true });
+        }
+        
+        // Plot true regression line
+        function plotTrueRegression() {
+            const x = Array.from({ length: 50 }, (_, i) => 8 + i * 0.24);
+            const y = x.map(xi => trueBeta0 + trueBeta1 * xi);
+            
+            const trace = {
+                x: x,
+                y: y,
+                type: 'scatter',
+                mode: 'lines',
+                name: '真の回帰直線',
+                line: { color: '#e74c3c', width: 3 }
+            };
+            
+            const layout = {
+                xaxis: { title: '教育年数' },
+                yaxis: { title: '収入(万円/月)' },
+                margin: { l: 50, r: 20, b: 50, t: 20 },
+                showlegend: true
+            };
+            
+            Plotly.newPlot('true-regression', [trace], layout, { responsive: true });
+        }
+        
+        // Update sample table
+        function updateSampleTable(sample) {
+            const tbody = document.getElementById('sample-tbody');
+            tbody.innerHTML = '';
+            
+            sample.forEach(d => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = d.id;
+                row.insertCell(1).textContent = d.x.toFixed(1);
+                row.insertCell(2).textContent = d.y.toFixed(1);
+            });
+        }
+        
+        // Plot OLS results
+        function plotOLSResults(sample, ols) {
+            const x = sample.map(d => d.x);
+            const y = sample.map(d => d.y);
+            
+            const scatterTrace = {
+                x: x,
+                y: y,
+                type: 'scatter',
+                mode: 'markers',
+                name: '標本データ',
+                marker: { color: '#3498db', size: 6 }
+            };
+            
+            const xLine = Array.from({ length: 50 }, (_, i) => 8 + i * 0.24);
+            const yTrue = xLine.map(xi => trueBeta0 + trueBeta1 * xi);
+            const yFitted = xLine.map(xi => ols.beta0Hat + ols.beta1Hat * xi);
+            
+            const trueTrace = {
+                x: xLine,
+                y: yTrue,
+                type: 'scatter',
+                mode: 'lines',
+                name: '真の回帰直線',
+                line: { color: '#e74c3c', width: 2 }
+            };
+            
+            const fittedTrace = {
+                x: xLine,
+                y: yFitted,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'OLS推定線',
+                line: { color: '#2ecc71', width: 2, dash: 'dash' }
+            };
+            
+            const layout = {
+                xaxis: { title: '教育年数' },
+                yaxis: { title: '収入(万円/月)' },
+                margin: { l: 50, r: 20, b: 50, t: 20 },
+                showlegend: true
+            };
+            
+            Plotly.newPlot('ols-plot', [scatterTrace, trueTrace, fittedTrace], layout, { responsive: true });
+        }
+        
+        // Update OLS results display
+        function updateOLSResults(ols) {
+            const resultsDiv = document.getElementById('ols-results');
+            resultsDiv.innerHTML = `
+                <strong>推定結果:</strong><br>
+                β̂₀ = ${ols.beta0Hat.toFixed(3)} (SE: ${ols.seBeta0.toFixed(3)})<br>
+                95%信頼区間: [${ols.ci0[0].toFixed(3)}, ${ols.ci0[1].toFixed(3)}]<br>
+                真の値β₀=${trueBeta0}を含む: ${ols.ci0[0] <= trueBeta0 && trueBeta0 <= ols.ci0[1] ? '✓' : '✗'}<br><br>
+                β̂₁ = ${ols.beta1Hat.toFixed(3)} (SE: ${ols.seBeta1.toFixed(3)})<br>
+                95%信頼区間: [${ols.ci1[0].toFixed(3)}, ${ols.ci1[1].toFixed(3)}]<br>
+                真の値β₁=${trueBeta1}を含む: ${ols.ci1[0] <= trueBeta1 && trueBeta1 <= ols.ci1[1] ? '✓' : '✗'}<br><br>
+                R² = ${ols.rSquared.toFixed(3)}
+            `;
+        }
+        
+        // Generate new sample
+        function generateNewSample() {
+            currentSample = generateSample();
+            updateSampleTable(currentSample);
+            
+            const ols = calculateOLS(currentSample);
+            updateOLSResults(ols);
+            plotOLSResults(currentSample, ols);
+        }
+        
+        // Run confidence interval simulation
+        function runSimulation() {
+            simulationResults = [];
+            const numSimulations = 1000;
+            
+            for (let i = 0; i < numSimulations; i++) {
+                const sample = generateSample();
+                const ols = calculateOLS(sample);
+                
+                simulationResults.push({
+                    beta0Hat: ols.beta0Hat,
+                    beta1Hat: ols.beta1Hat,
+                    ci0: ols.ci0,
+                    ci1: ols.ci1,
+                    contains0: ols.ci0[0] <= trueBeta0 && trueBeta0 <= ols.ci0[1],
+                    contains1: ols.ci1[0] <= trueBeta1 && trueBeta1 <= ols.ci1[1]
+                });
+            }
+            
+            // Calculate coverage rates
+            const coverage0 = simulationResults.filter(r => r.contains0).length / numSimulations;
+            const coverage1 = simulationResults.filter(r => r.contains1).length / numSimulations;
+            
+            // Update stats
+            document.getElementById('simulation-stats').innerHTML = `
+                <strong>シミュレーション結果 (${numSimulations}回)</strong><br>
+                β₁の95%信頼区間カバー率: ${(coverage1 * 100).toFixed(1)}%<br>
+                β₀の95%信頼区間カバー率: ${(coverage0 * 100).toFixed(1)}%<br>
+                理論値: 95.0%
+            `;
+            
+            plotSimulationResults();
+        }
+        
+        // Plot simulation results
+        function plotSimulationResults() {
+            const x = simulationResults.map((_, i) => i + 1);
+            const y1Lower = simulationResults.map(r => r.ci1[0]);
+            const y1Upper = simulationResults.map(r => r.ci1[1]);
+            const colors1 = simulationResults.map(r => r.contains1 ? '#2ecc71' : '#e74c3c');
+            
+            // Show only first 100 intervals for clarity
+            const showCount = Math.min(100, simulationResults.length);
+            
+            const traces = [];
+            
+            // Add confidence intervals for β₁
+            for (let i = 0; i < showCount; i++) {
+                traces.push({
+                    x: [i + 1, i + 1],
+                    y: [y1Lower[i], y1Upper[i]],
+                    type: 'scatter',
+                    mode: 'lines',
+                    line: { color: colors1[i], width: 2 },
+                    showlegend: false,
+                    hoverinfo: 'skip'
+                });
+            }
+            
+            // Add true value line for β₁
+            traces.push({
+                x: [1, showCount],
+                y: [trueBeta1, trueBeta1],
+                type: 'scatter',
+                mode: 'lines',
+                name: `真の値 (β₁=${trueBeta1})`,
+                line: { color: '#34495e', width: 3, dash: 'solid' }
+            });
+            
+            const layout = {
+                title: `β₁の95%信頼区間 (最初の${showCount}回)`,
+                xaxis: { title: 'シミュレーション回数' },
+                yaxis: { title: 'β₁の推定値' },
+                margin: { l: 50, r: 20, b: 50, t: 50 },
+                showlegend: true
+            };
+            
+            Plotly.newPlot('simulation-plot', traces, layout, { responsive: true });
+        }
+        
+        // Reset simulation
+        function resetSimulation() {
+            simulationResults = [];
+            document.getElementById('simulation-stats').innerHTML = 'シミュレーション実行前';
+            document.getElementById('simulation-plot').innerHTML = '';
+        }
+        
+        // Initialize
+        window.onload = function() {
+            plotPopulationSurface();
+            plotTrueRegression();
+            generateNewSample();
+        };
+    </script>
+</body>
+</html>
