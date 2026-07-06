@@ -19,6 +19,7 @@ We use `paperStatus` to categorize papers on `/papers/` (not necessarily shown a
 
 - `paperStatus: published` (Published papers)
 - `paperStatus: working` (Working papers)
+- `paperStatus: "R&R"` (Working papers)
 - `paperStatus: wip` (Work in progress)
 
 `summary` is for a short one-line description that shows up in list views.

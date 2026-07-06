@@ -23,7 +23,7 @@
 {{- $pages := sort .RegularPages "Date" "desc" }}
 
 {{- $published := where $pages "Params.paperStatus" "published" }}
-{{- $working := where $pages "Params.paperStatus" "in" (slice "working" "under review" "submitted") }}
+{{- $working := where $pages "Params.paperStatus" "in" (slice "working" "under review" "submitted" "R&R") }}
 {{- $wip := where $pages "Params.paperStatus" "wip" }}
 
 {{- if $published }}
@@ -54,6 +54,5 @@
 {{- end }}
 
 {{- end }}
-
 
 
