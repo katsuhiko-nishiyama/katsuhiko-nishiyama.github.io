@@ -23,6 +23,7 @@
     </div>
 
     {{- $pdfs := (.Resources.Match "*.pdf") }}
+    {{- if (.Param "hidePaperLink") }}{{- $pdfs = slice }}{{- end }}
     {{- $externalUrl := .Params.externalLink.url | default .Params.externalLink.URL }}
     {{- if or $pdfs $externalUrl }}
     <div class="paper-actions">
@@ -69,5 +70,4 @@
 </article>
 
 {{- end }}{{/* end main */}}
-
 

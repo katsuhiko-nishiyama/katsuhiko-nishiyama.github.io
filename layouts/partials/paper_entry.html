@@ -50,6 +50,7 @@
   {{- end }}
 
   {{- $pdfs := ($p.Resources.Match "*.pdf") }}
+  {{- if ($p.Param "hidePaperLink") }}{{- $pdfs = slice }}{{- end }}
   {{- $externalUrl := $p.Params.externalLink.url | default $p.Params.externalLink.URL }}
   {{- $status := ($p.Param "paperStatus") | default "working" }}
   {{- $externalText := $p.Params.externalLink.text | default $p.Params.externalLink.Text }}
@@ -96,5 +97,4 @@
   <a class="entry-link" aria-label="post link to {{ $p.Title | plainify }}" href="{{ $p.Permalink }}"></a>
   {{- end }}
 </article>
-
 
