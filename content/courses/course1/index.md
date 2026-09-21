@@ -1,6 +1,6 @@
 ---
 title: "Econometrics 1"
-term: "2025 Spring/Summer, 2026 Spring/Summer"
+term: "2026 Spring/Summer, 2025 Spring/Summer"
 audience: "Undergraduate (School of Law) / Graduate (OSIPP)"
 summary: ""
 cover:
