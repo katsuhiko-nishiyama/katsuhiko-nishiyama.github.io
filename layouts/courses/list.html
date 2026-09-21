@@ -35,7 +35,7 @@
   <div class="entry-content">
     <p>
       {{- if $term }}{{ $term }}{{ end -}}
-      {{- if and $term $aud }}&nbsp;•&nbsp;{{ end -}}
+      {{- if and $term $aud }}<br>{{ end -}}
       {{- if $aud }}{{ $aud }}{{ end -}}
     </p>
   </div>
@@ -61,5 +61,4 @@
 {{- end }}
 
 {{- end }}
-
 
