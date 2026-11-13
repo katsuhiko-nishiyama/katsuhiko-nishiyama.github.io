@@ -7,13 +7,18 @@ description: ""
 summary: ""
 paperStatus: working
 hideSummary: true
-hidePaperLink: true
 disableLink: true
 cover:
     image:
     alt: "Medical Debt, Self-Insurance, and the Value of Health Insurance for the Non-Elderly"
     relative: true
 ---
+
+---
+
+## Download
+
+- [Paper](ESHI_paper.pdf)
 
 ---
 
