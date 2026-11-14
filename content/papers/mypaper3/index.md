@@ -5,7 +5,7 @@ tags: []
 author: ["Katsuhiko Nishiyama"]
 description: ""
 summary: ""
-paperStatus: "2nd round R&R"
+paperStatus: "R&R"
 hideSummary: true
 disableLink: true
 cover:
